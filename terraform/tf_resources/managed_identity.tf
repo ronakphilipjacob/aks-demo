@@ -11,7 +11,7 @@ locals {
 resource "azurerm_user_assigned_identity" "managed_identity" {
   for_each            = local.managed_identity_map
   location            = lookup(each.value.spec, "location", local.region)
-  name                = each.value.metadata.name
+  name                = each.value.spec.name
   resource_group_name = local.rg_name[each.value.spec.rg]
   tags                = merge(local.common_tags, lookup(each.value.spec, "tags", {}))
 }

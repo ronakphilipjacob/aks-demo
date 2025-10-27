@@ -22,13 +22,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   default_node_pool {
-    name                        = each.value.spec.default_node_pool_name
-    node_count                  = each.value.spec.node_count
-    vm_size                     = each.value.spec.vm_size
-    vnet_subnet_id              = local.subnet_id[each.value.spec.vnet_subnet]
-    zones                       = lookup(each.value.spec, "zones", null)
-    temporary_name_for_rotation = lookup(each.value.spec, "temp_name_for_rotation", "tempdefault")
-    max_pods                    = lookup(each.value.spec, "max_pods", 50)
+    name                        = each.value.spec.default_node_pool.name
+    node_count                  = each.value.spec.default_node_pool.node_count
+    os_sku                      = each.value.spec.default_node_pool.os_sku
+    vm_size                     = each.value.spec.default_node_pool.vm_size
+    vnet_subnet_id              = local.subnet_id[each.value.spec.default_node_pool.vnet_subnet]
+    zones                       = lookup(each.value.spec.default_node_pool, "zones", null)
+    temporary_name_for_rotation = lookup(each.value.spec.default_node_pool, "temp_name_for_rotation", "tempdefault")
+    max_pods                    = lookup(each.value.spec.default_node_pool, "max_pods", 50)
   }
 
   identity {
@@ -37,11 +38,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   network_profile {
-    network_plugin    = each.value.spec.network_plugin
-    network_policy    = each.value.spec.network_policy
-    load_balancer_sku = each.value.spec.load_balancer_sku
-    service_cidr      = lookup(each.value.spec, "service_cidr", null)
-    dns_service_ip    = lookup(each.value.spec, "dns_service_ip", null)
+    network_plugin    = each.value.spec.network_profile.network_plugin
+    network_policy    = each.value.spec.network_profile.network_policy
+    load_balancer_sku = each.value.spec.network_profile.load_balancer_sku
+    service_cidr      = lookup(each.value.spec.network_profile, "service_cidr", null)
+    dns_service_ip    = lookup(each.value.spec.network_profile, "dns_service_ip", null)
   }
 
   key_vault_secrets_provider {

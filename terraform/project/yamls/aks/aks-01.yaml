@@ -1,0 +1,29 @@
+spec:
+  name: aks-project
+  rg: rg-01
+  node_resource_group: rg-aks-project
+  dns_prefix: aks-project
+  azure_rbac_enabled: true
+
+  default_node_pool:
+    name: system-node
+    node_count: 1
+    os_sku: Ubuntu
+    vm_size: Standard_D4plds_v5
+    vnet_subnet: aks
+    zones: [1, 2, 3]
+    temp_name_for_rotation: temp-system-node
+    max_pods: 50
+
+  identity_type: UserAssigned
+  managed_identity: mi-aks
+
+  network_profile:
+    network_plugin: azure
+    network_policy: azure
+    load_balancer_sku: standard
+    service_cidr: 172.16.0.0/16
+    dns_service_ip: 172.16.0.10
+
+  secret_rotation_enabled: true
+  secret_rotation_interval: 5m
