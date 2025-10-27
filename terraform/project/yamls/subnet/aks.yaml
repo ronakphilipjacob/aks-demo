@@ -1,0 +1,5 @@
+spec:
+  name: subnet-aks
+  rg: rg-01
+  virtual_network: vnet-01
+  address_prefix: 10.0.1.0/24

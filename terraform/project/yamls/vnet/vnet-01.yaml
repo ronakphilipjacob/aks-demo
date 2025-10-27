@@ -1,0 +1,5 @@
+spec:
+  name: vnet-project
+  rg: rg-01
+  address_space:
+    - 10.0.0.0/16
