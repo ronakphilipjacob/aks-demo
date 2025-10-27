@@ -22,7 +22,6 @@ terraform {
     storage_account_name  = "platformiac"
     container_name        = "tf-state"
     key                   = "infra01.tfstate"
-    use_msi               = true
   }
 }
 
