@@ -13,7 +13,7 @@ spec:
     vm_size: Standard_D4plds_v5
     vnet_subnet: aks
     zones: [1, 2, 3]
-    temp_name_for_rotation: tempsystemnode
+    temp_name_for_rotation: tempsystem
     max_pods: 50
 
   identity_type: UserAssigned
