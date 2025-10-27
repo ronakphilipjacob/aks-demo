@@ -27,12 +27,48 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: latest
+
+    - name: Setup Python for Checkov
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
         
-    - name: Terraform
+    - name: Install Checkov
+      run: pip install checkov
+
+    - name: Copy Terraform Resources
+      working-directory: ./terraform/project
+      run: cp ../tf_resources/* .
+
+    - name: Terraform Init and Validate
       working-directory: ./terraform/project
       run: |
         export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}
         cp ../tf_resources/* .
         terraform init
         terraform validate
-        terraform apply -auto-approve
+
+    - name: Run Checkov Security Scan
+      working-directory: ./terraform/project
+      run: |
+        checkov -d . --framework terraform --output cli --output sarif --output-file-path checkov-results.sarif
+      continue-on-error: true
+
+    - name: Upload Checkov SARIF Results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: ./terraform/project/checkov-results.sarif
+        category: checkov-terraform
+
+    - name: Terraform Plan
+      working-directory: ./terraform/project
+      run: |
+        export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}
+        terraform plan -out=tfplan
+
+    - name: Terraform Apply
+      working-directory: ./terraform/project
+      run: |
+        export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}
+        terraform apply -auto-approve tfplan

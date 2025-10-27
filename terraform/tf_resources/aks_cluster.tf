@@ -33,7 +33,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   identity {
     type         = each.value.spec.identity_type
-    identity_ids = [local.managed_identity[each.value.spec.managed_identity]]
+    identity_ids = [local.managed_identity_id[each.value.spec.managed_identity]]
   }
 
   network_profile {
