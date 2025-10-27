@@ -3,6 +3,10 @@ name: Infrastructure Deployment Pipeline
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
