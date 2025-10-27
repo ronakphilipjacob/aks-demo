@@ -12,5 +12,5 @@ resource "azurerm_subnet" "subnet" {
   name                                          = each.value.spec.name
   resource_group_name                           = local.rg_name[each.value.spec.rg]
   virtual_network_name                          = local.vnet_name[each.value.spec.virtual_network]
-  address_prefixes                              = each.value.spec.address_prefix
+  address_prefixes                              = each.value.spec.address_prefixes
 }

@@ -16,7 +16,7 @@ resource "azurerm_network_security_group" "nsg" {
   for_each            = local.nsg_map
   name                = each.value.spec.name
   location            = lookup(each.value.spec, "location", local.region)
-  resource_group_name = local.rg_name[each.value.spec.ibm-prism-spec.rg]
+  resource_group_name = local.rg_name[each.value.spec.rg]
 
   dynamic "security_rule" {
     for_each = each.value.spec.rules
