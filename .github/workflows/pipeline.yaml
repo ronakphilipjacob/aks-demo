@@ -35,4 +35,4 @@ jobs:
         cp ../tf_resources/* .
         terraform init
         terraform validate
-        terraform apply -auto-approve tfplan
+        terraform apply -auto-approve
