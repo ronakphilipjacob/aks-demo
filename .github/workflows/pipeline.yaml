@@ -44,7 +44,6 @@ jobs:
       working-directory: ./terraform/project
       run: |
         export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}
-        cp ../tf_resources/* .
         terraform init
         terraform validate
 
