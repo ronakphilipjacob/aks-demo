@@ -10,6 +10,7 @@ permissions:
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
+    container: aztfmod/rover:1.8.5-2411.0500
     
     steps:
 
