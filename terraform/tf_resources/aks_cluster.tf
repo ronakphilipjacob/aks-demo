@@ -31,10 +31,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     max_pods                    = lookup(each.value.spec, "max_pods", 50)
   }
 
-  # identity {
-  #   type         = each.value.spec.identity_type
-  #   identity_ids = [local.managed_identity[each.value.spec.managed_identity]]
-  # }
+  identity {
+    type         = each.value.spec.identity_type
+    identity_ids = [local.managed_identity[each.value.spec.managed_identity]]
+  }
 
   network_profile {
     network_plugin    = each.value.spec.network_plugin
