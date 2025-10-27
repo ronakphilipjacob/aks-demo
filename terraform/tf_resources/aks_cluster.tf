@@ -11,14 +11,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
   for_each            = local.aks_cluster_map
   name                = each.value.spec.name
   location            = lookup(each.value.spec, "location", local.region)
-  resource_group_name = local.rg_name[each.value.spec.ibm-prism-spec.rg]
+  resource_group_name = local.rg_name[each.value.spec.rg]
   node_resource_group = lookup(each.value.spec, "node_resource_group", null)
   sku_tier            = lookup(each.value.spec, "sku_tier", "Free")
   dns_prefix          = each.value.spec.dns_prefix
   kubernetes_version  = lookup(each.value.spec, "kubernetes_version", null)
 
   azure_active_directory_role_based_access_control {
-    azure_rbac_enabled     = lookup(each.value.spec.ibm-prism-spec, "azure_rbac_enabled", null)
+    azure_rbac_enabled     = lookup(each.value.spec, "azure_rbac_enabled", null)
   }
 
   default_node_pool {
