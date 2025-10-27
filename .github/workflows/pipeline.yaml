@@ -6,15 +6,15 @@ on:
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
-    container: aztfmod/rover:1.8.5-2411.0500
     permissions:
       id-token: write
       contents: read
     
     steps:
-
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
 
     - name: Azure CLI Login
       uses: azure/login@v2
@@ -35,5 +35,4 @@ jobs:
         cp ../tf_resources/* .
         terraform init
         terraform validate
-        terraform plan -out tfplan
         terraform apply -auto-approve tfplan
