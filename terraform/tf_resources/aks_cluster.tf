@@ -18,7 +18,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version  = lookup(each.value.spec, "kubernetes_version", null)
 
   azure_active_directory_role_based_access_control {
-    tenant_id          = lookup(each.value.spec.azure_ad_rbac, "tenant_id", null)
+    tenant_id          = lookup(each.value.spec, "tenant_id", null)
     azure_rbac_enabled = lookup(each.value.spec, "azure_rbac_enabled", null)
   }
 

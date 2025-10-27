@@ -4,6 +4,7 @@ spec:
   node_resource_group: rg-aks-project
   dns_prefix: aks-project
   azure_rbac_enabled: true
+  tenant_id: "8cfd7082-f52f-4889-8a79-2c1d4a3a3138"
 
   default_node_pool:
     name: systemnode
