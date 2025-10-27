@@ -1,5 +1,5 @@
 spec:
-  name:
-  rg:
+  name: nsg-aks
+  rg: rg-01
   rules: []
   subnet: aks
