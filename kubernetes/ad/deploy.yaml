@@ -31,7 +31,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: adservice
-          image: acrproject.azurecr.io/ad:62d22c3624b80368da1ac10baf3a75c19eed1ec9
+          image: acrproject.azurecr.io/ad:c6aed602e182d8d129e106799e248616ba086eb4
           imagePullPolicy: IfNotPresent
           ports:
             
