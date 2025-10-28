@@ -1,0 +1,106 @@
+name: AppA-Service-CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    paths:
+      - '.github/workflows/app-a.yaml'
+      - 'src/appA/**'
+  pull_request_target:
+    branches: [master]
+    paths:
+      - '.github/workflows/app-a.yaml'
+      - 'src/appA/**'
+  workflow_dispatch:
+
+jobs:
+  unit-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './src/appA/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./src/appA
+        run: npm ci
+      
+      - name: Run unit tests
+        working-directory: ./src/appA
+        run: npm test
+
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './src/appA/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./src/appA
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./src/appA
+        run: npm run lint
+        continue-on-error: true
+  
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: [unit-testing, code-quality]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/appA
+          file: ./src/appA/Dockerfile
+          push: true
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/app-a:${{ github.sha }}
+  
+  update-k8s-deployment:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+       
+      - name: Update Kubernetes Deployment
+        run: |
+          sed -i "s|image: .*|image: ${{ secrets.ACR_LOGIN_SERVER }}/app-a:${{ github.sha }}|" kubernetes/appA/deployment.yaml
+          cat kubernetes/appA/deployment.yaml
+
+      - name: Commit and push updated Kubernetes manifest
+        run: |
+           git config --global user.email "ronakphilipjacob.rpj@gmail.com"
+           git config --global user.name "ronakphilipjacob"
+           git add kubernetes/appA/deployment.yaml
+           git commit -m "[CI]: Update appA deployment image tag"
+           git push
