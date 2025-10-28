@@ -4,7 +4,7 @@ spec:
   node_resource_group: rg-aks-project
   dns_prefix: aks-project
   azure_rbac_enabled: true
-  tenant_id: "8cfd7082-f52f-4889-8a79-2c1d4a3a3138"
+  tenant_id: "46441f94-cf84-429f-a0ca-6ffcd4fdca2d"
 
   default_node_pool:
     name: systemnode
@@ -12,7 +12,7 @@ spec:
     os_sku: Ubuntu
     vm_size: Standard_D4as_v5
     vnet_subnet: aks
-    zones: [1, 3]
+    zones: [1, 2, 3]
     temp_name_for_rotation: tempsystem
     max_pods: 50
 
