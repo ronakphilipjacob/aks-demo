@@ -63,7 +63,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 resource "azurerm_role_assignment" "kubelet_role_assignment" {
   for_each                         = local.aks_kubelet_role_assignment_map
   scope                            = local.resource_id_map[each.value.spec.scope]
-  role_definition_name             = each.value.spec.role_definition_name
+  role_definition_name             = each.value.spec.role_definition
   principal_id                     = local.aks_kubelet_identity[each.value.spec.aks_instance]
   skip_service_principal_aad_check = lookup(each.value.spec, "skip_service_principal_aad_check", true)
 }
