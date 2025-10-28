@@ -31,7 +31,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: productcatalogservice
-          image: acrproject.azurecr.io/product-catalog:8298a84444a909fdf47731f60e1eeb9e8bc3b63f
+          image: acrproject.azurecr.io/product-catalog:5ed3bf29ed2fcae4dbef65cc62fa787c8fc22fb8
           imagePullPolicy: IfNotPresent
           ports:
             
