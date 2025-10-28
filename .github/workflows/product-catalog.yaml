@@ -1,58 +1,59 @@
-name: AD-Service-CI
+# CI for Product Catalog Service
+name: Product-Catalog-Service-CI
 
 on:
   pull_request:
     branches: [master]
   push:
     paths:
-      - '.github/workflows/ad.yaml'
-      - 'src/ad/**'
+      - '.github/workflows/product-catalog.yaml'
+      - 'src/product-catalog/**'
   pull_request_target:
     branches: [master]
     paths:
-      - '.github/workflows/ad.yaml'
-      - 'src/ad/**'
+      - '.github/workflows/product-catalog.yaml'
+      - 'src/product-catalog/**'
 
 jobs:
   unit-testing:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
         with:
-          java-version: '21'
-          distribution: 'temurin'
-      
-      - name: Give Gradle permission to execute
-        run: chmod +x ./src/ad/gradlew
-      
-      - name: Run unit tests
-        working-directory: ./src/ad
-        run: ./gradlew test --warning-mode all
+          go-version: 1.22
+
+      - name: Build
+        run: |
+          cd src/product-catalog
+          go mod download
+          go build -o product-catalog-service main.go
+
+      - name: unit tests
+        run: |
+          cd src/product-catalog/
+          go test -v ./...
 
   code-quality:
-    runs-on: ubuntu-latest
-    steps:
+      runs-on: ubuntu-latest
+      steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Setup Go
+        uses: actions/setup-go@v2
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          go-version: 1.22
 
-      - name: Give Gradle permission to execute
-        run: chmod +x ./src/ad/gradlew
+      - name: Run golangci-lint
+        run: |
+          go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+          golangci-lint run src/product-catalog/...
 
-      - name: Run Google Java Format Check
-        working-directory: ./src/ad
-        run: ./gradlew verifyGoogleJavaFormat --warning-mode all
-        continue-on-error: true
-  
   build-and-push:
     runs-on: ubuntu-latest
     needs: [unit-testing, code-quality]

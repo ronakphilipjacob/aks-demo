@@ -1,17 +1,17 @@
-name: AD-Service-CI
+name: Checkout-Service-CI
 
 on:
   pull_request:
     branches: [master]
   push:
     paths:
-      - '.github/workflows/ad.yaml'
-      - 'src/ad/**'
+      - '.github/workflows/checkout.yaml'
+      - 'src/checkout/**'
   pull_request_target:
     branches: [master]
     paths:
-      - '.github/workflows/ad.yaml'
-      - 'src/ad/**'
+      - '.github/workflows/checkout.yaml'
+      - 'src/checkout/**'
 
 jobs:
   unit-testing:
@@ -19,40 +19,46 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-      
-      - name: Give Gradle permission to execute
-        run: chmod +x ./src/ad/gradlew
-      
-      - name: Run unit tests
-        working-directory: ./src/ad
-        run: ./gradlew test --warning-mode all
 
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.22
+
+      - name: Build
+        run: |
+          cd src/checkout
+          go mod download
+          go build -o checkout main.go
+
+      - name: unit tests
+        run: |
+          cd src/checkout/
+          go test -v ./...
+  
   code-quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          go-version: 1.22
 
-      - name: Give Gradle permission to execute
-        run: chmod +x ./src/ad/gradlew
+      - name: Install golangci-lint
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.56.2
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Run Google Java Format Check
-        working-directory: ./src/ad
-        run: ./gradlew verifyGoogleJavaFormat --warning-mode all
+      - name: Run golangci-lint
+        working-directory: ./src/checkout
+        run: |
+            go mod tidy
+            golangci-lint run ./... --timeout 5m
         continue-on-error: true
-  
+
   build-and-push:
     runs-on: ubuntu-latest
     needs: [unit-testing, code-quality]
