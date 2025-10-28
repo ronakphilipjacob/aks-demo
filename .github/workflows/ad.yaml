@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/ad.yaml'
       - 'src/ad/**'
+  workflow_dispatch:
 
 jobs:
   unit-testing:
