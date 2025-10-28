@@ -10,7 +10,7 @@ spec:
     name: systemnode
     node_count: 1
     os_sku: Ubuntu
-    vm_size: Standard_D4plds_v5
+    vm_size: Standard_D4as_v5
     vnet_subnet: aks
     zones: [1, 2, 3]
     temp_name_for_rotation: tempsystem
