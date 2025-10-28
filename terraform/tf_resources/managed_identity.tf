@@ -5,6 +5,11 @@ locals {
       for k, v in local.managed_identity_map :
         k => azurerm_user_assigned_identity.managed_identity[k].id
   }
+
+  managed_identity_principal_id = {
+      for k, v in local.managed_identity_map :
+        k => azurerm_user_assigned_identity.managed_identity[k].principal_id
+  }
 }
 
 

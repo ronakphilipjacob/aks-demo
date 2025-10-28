@@ -1,0 +1,4 @@
+spec:
+  scope: acr-01_acr
+  role_definition: AcrPull
+  managed_identity: mi-aks
