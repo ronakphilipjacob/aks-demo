@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/frontend.yaml'
       - 'src/frontend/**'
+  workflow_dispatch:
 
 jobs:
   unit-testing:

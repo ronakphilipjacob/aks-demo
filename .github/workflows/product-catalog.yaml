@@ -13,6 +13,7 @@ on:
     paths:
       - '.github/workflows/product-catalog.yaml'
       - 'src/product-catalog/**'
+  workflow_dispatch:
 
 jobs:
   unit-testing:
