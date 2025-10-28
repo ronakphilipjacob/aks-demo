@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: appb
-        image: acrproject.azurecr.io/appb:latest
+        image: acrproject.azurecr.io/app-b:f934156b65f9304763d1ee5f417cabcf13a0bf09
         ports:
         - containerPort: 8080
         env:
