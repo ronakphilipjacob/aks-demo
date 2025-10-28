@@ -78,7 +78,6 @@ jobs:
           file: ./src/ad/Dockerfile
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/ad:${{ github.sha }}
-          platforms: linux/amd64, linux/arm64
   
   update-k8s-deployment:
     runs-on: ubuntu-latest
