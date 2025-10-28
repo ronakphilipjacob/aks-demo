@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 eclipse-temurin:21-jdk AS builder
+FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /usr/src/app/
 
@@ -16,7 +16,7 @@ RUN ./gradlew installDist -PprotoSourceDir=./proto
 
 #####################################################
 
-FROM --platform=linux/amd64 eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jre
 
 WORKDIR /usr/src/app/
 
