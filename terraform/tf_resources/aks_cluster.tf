@@ -1,9 +1,15 @@
 locals {
-  aks_cluster_map = { for f in fileset("yamls/aks", "*.yaml") : replace(f, ".yaml", "") => yamldecode(file(join("", ["yamls/aks/", f]))) }
-  
+  aks_cluster_map                 = { for f in fileset("yamls/aks", "*.yaml") : replace(f, ".yaml", "") => yamldecode(file(join("", ["yamls/aks/", f]))) }
+  aks_kubelet_role_assignment_map = { for f in fileset("yamls/kubelet_role_assignment", "*.yaml") : replace(f, ".yaml", "") => yamldecode(file(join("", ["yamls/kubelet_role_assignment/", f]))) }
+
   aks_cluster_id = {
       for k, v in local.aks_cluster_map :
       k => azurerm_kubernetes_cluster.aks[k].id
+  }
+
+  aks_kubelet_identity = {
+    for k, v in local.aks_cluster_map :
+      k => azurerm_kubernetes_cluster.aks[k].kubelet_identity[0].object_id
   }
 }
 
@@ -52,4 +58,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = merge(local.common_tags, lookup(each.value.spec, "tags", {}))
+}
+
+resource "azurerm_role_assignment" "kubelet_role_assignment" {
+  for_each                         = local.aks_kubelet_role_assignment_map
+  scope                            = local.resource_id_map[each.value.spec.scope]
+  role_definition_name             = each.value.spec.role_definition_name
+  principal_id                     = local.aks_kubelet_identity[each.value.spec.aks_instance]
+  skip_service_principal_aad_check = lookup(each.value.spec, "skip_service_principal_aad_check", true)
 }
