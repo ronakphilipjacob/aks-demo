@@ -1,5 +1,5 @@
 locals {
-  region = "centralindia"
+  region = "canadacentral"
 
   common_tags = {
     Environment = "Dev"
@@ -18,8 +18,8 @@ terraform {
 
 terraform {
   backend "azurerm" {
-    resource_group_name   = "platform-rg"
-    storage_account_name  = "platformiac"
+    resource_group_name   = "platform-ronak-rg"
+    storage_account_name  = "infrastate01"
     container_name        = "tf-state"
     key                   = "infra01.tfstate"
   }
