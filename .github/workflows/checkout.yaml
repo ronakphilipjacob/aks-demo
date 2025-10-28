@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/checkout.yaml'
       - 'src/checkout/**'
+  workflow_dispatch:
 
 jobs:
   unit-testing:
