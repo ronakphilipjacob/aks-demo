@@ -1,0 +1,5 @@
+spec:
+  name: acr-project
+  rg: rg-01
+  sku: Standard
+  admin_enabled: true
