@@ -1,4 +1,4 @@
-name: appB-Service-CI
+name: AppB-Service-CI
 
 on:
   pull_request:
