@@ -52,8 +52,9 @@ jobs:
 
       - name: Run golangci-lint
         run: |
-          go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
-          golangci-lint run src/product-catalog/...
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.2
+          cd src/product-catalog
+          golangci-lint run ./...
 
   build-and-push:
     runs-on: ubuntu-latest
@@ -75,10 +76,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: ./src/ad
-          file: ./src/ad/Dockerfile
+          context: ./src/product-catalog
+          file: ./src/product-catalog/Dockerfile
           push: true
-          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ad:${{ github.sha }}
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/product-catalog:${{ github.sha }}
   
   update-k8s-deployment:
     runs-on: ubuntu-latest
@@ -91,13 +92,13 @@ jobs:
        
       - name: Update Kubernetes Deployment
         run: |
-          sed -i "s|image: .*|image: ${{ secrets.ACR_LOGIN_SERVER }}/ad:${{ github.sha }}|" kubernetes/ad/deploy.yaml
-          cat kubernetes/ad/deploy.yaml
+          sed -i "s|image: .*|image: ${{ secrets.ACR_LOGIN_SERVER }}/product-catalog:${{ github.sha }}|" kubernetes/productcatalog/deploy.yaml
+          cat kubernetes/productcatalog/deploy.yaml
 
       - name: Commit and push updated Kubernetes manifest
         run: |
            git config --global user.email "ronakphilipjacob.rpj@gmail.com"
            git config --global user.name "ronakphilipjacob"
-           git add kubernetes/ad/deploy.yaml
-           git commit -m "[CI]: Update ad deployment image tag"
+           git add kubernetes/productcatalog/deploy.yaml
+           git commit -m "[CI]: Update product-catalog deployment image tag"
            git push
