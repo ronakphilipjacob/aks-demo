@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: appa
-        image: acrproject.azurecr.io/app-a:a33abccd052c3cf3335153ee71cc204dea0f47a9
+        image: acrproject.azurecr.io/app-a:e845e24042f6ead1afdcd95ffdabd8f89b336833
         ports:
         - containerPort: 3000
         env:
