@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk AS builder
+FROM --platform=linux/amd64 eclipse-temurin:21-jdk AS builder
 
 WORKDIR /usr/src/app/
 
@@ -16,7 +16,7 @@ RUN ./gradlew installDist -PprotoSourceDir=./proto
 
 #####################################################
 
-FROM eclipse-temurin:21-jre
+FROM --platform=linux/amd64 eclipse-temurin:21-jre
 
 WORKDIR /usr/src/app/
 
@@ -24,5 +24,6 @@ COPY --from=builder /usr/src/app/ ./
 
 ENV AD_PORT 9099
 
-ENTRYPOINT ["./build/install/opentelemetry-demo-ad/bin/Ad"]
+# Use Java directly instead of the shell script wrapper
+ENTRYPOINT ["java", "-cp", "./build/install/opentelemetry-demo-ad/lib/*", "oteldemo.AdService"]
 
