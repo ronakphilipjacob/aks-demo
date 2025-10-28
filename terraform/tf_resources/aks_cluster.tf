@@ -57,6 +57,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     secret_rotation_interval = each.value.spec.secret_rotation_interval
   }
 
+  web_app_routing {
+    dns_zone_ids             = each.value.spec.ibm-prism-spec.web_app_routing_dns_zones
+    default_nginx_controller = lookup(each.value.spec.ibm-prism-spec, "default_nginx_controller", "External")
+  }
+
   tags = merge(local.common_tags, lookup(each.value.spec, "tags", {}))
 }
 
