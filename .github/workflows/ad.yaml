@@ -72,13 +72,13 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: ./src/ad
           file: ./src/ad/Dockerfile
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/ad:${{ github.sha }}
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
   
   update-k8s-deployment:
     runs-on: ubuntu-latest
