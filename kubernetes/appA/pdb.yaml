@@ -2,6 +2,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: appa-pdb
+  namespace: app-a
 spec:
   minAvailable: 2
   selector:
