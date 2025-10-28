@@ -12,7 +12,7 @@ spec:
     os_sku: Ubuntu
     vm_size: Standard_D4as_v5
     vnet_subnet: aks
-    zones: [1, 2, 3]
+    zones: [1, 3]
     temp_name_for_rotation: tempsystem
     max_pods: 50
 
