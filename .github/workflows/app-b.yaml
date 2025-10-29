@@ -38,6 +38,8 @@ jobs:
           file: ./src/appB/Dockerfile
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/app-b:${{ github.sha }}
+          build-args: |
+            APPINSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPINSIGHTS_INSTRUMENTATION_KEY }}
   
   update-k8s-deployment:
     runs-on: ubuntu-latest
