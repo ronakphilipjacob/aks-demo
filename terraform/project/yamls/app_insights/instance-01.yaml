@@ -1,0 +1,5 @@
+spec:
+  name: app-insights
+  rg: rg-01
+  log_analytics_required: true
+  law: law-01

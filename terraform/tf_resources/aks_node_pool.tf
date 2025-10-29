@@ -4,7 +4,7 @@ locals {
 
 resource "azurerm_kubernetes_cluster_node_pool" "nodePool" {
   for_each                    = local.aks_node_pool_map
-  name                        = each.value.metadata.name
+  name                        = each.value.spec.name
   kubernetes_cluster_id       = local.aks_cluster_id[each.value.spec.aks_cluster]
   vm_size                     = each.value.spec.vm_size
   vnet_subnet_id              = local.subnet_id[each.value.spec.subnet]
@@ -14,7 +14,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodePool" {
   node_count                  = each.value.spec.node_count
 
   zones                       = lookup(each.value.spec, "zones", null)
-  temporary_name_for_rotation = lookup(each.value.spec, "temp_name_for_rotation", "temp${each.value.metadata.name}")
+  temporary_name_for_rotation = lookup(each.value.spec, "temp_name_for_rotation", "temp${each.value.spec.name}")
   max_pods                    = lookup(each.value.spec, "max_pods", 50)
   node_labels                 = lookup(each.value.spec, "node_labels", {})
 

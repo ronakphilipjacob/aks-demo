@@ -8,9 +8,9 @@ urlencode() {
   python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))"
 }
 
-CPU_QUERY='avg(rate(container_cpu_usage_seconds_total{namespace!=""}[5m])) * 100'
-MEM_QUERY='avg(container_memory_usage_bytes{namespace!=""}) / (1024*1024*1024)'
-POD_QUERY='count(kube_pod_info)'
+CPU_QUERY='avg_over_time((rate(container_cpu_usage_seconds_total{namespace!=""}[5m]) * 100)[24h:])'
+MEM_QUERY='avg_over_time(container_memory_usage_bytes{namespace!=""}[24h:]) / (1024*1024*1024)'
+POD_QUERY='max_over_time(count(kube_pod_info)[24h:])'
 
 cpu_q=$(urlencode "$CPU_QUERY")
 mem_q=$(urlencode "$MEM_QUERY")
