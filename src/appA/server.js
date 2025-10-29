@@ -1,3 +1,24 @@
+// Initialize Application Insights
+const appInsights = require('applicationinsights');
+if (process.env.APPINSIGHTS_INSTRUMENTATION_KEY) {
+    appInsights
+        .setup(process.env.APPINSIGHTS_INSTRUMENTATION_KEY)
+        .setAutoDependencyCorrelation(true)
+        .setAutoCollectRequests(true)
+        .setAutoCollectPerformance(true, true)
+        .setAutoCollectExceptions(true)
+        .setAutoCollectDependencies(true)
+        .setAutoCollectConsole(true, true)
+        .setUseDiskRetryCaching(true)
+        .setSendLiveMetrics(false)
+        .start();
+    
+    const client = appInsights.defaultClient;
+    if (client) {
+        client.trackEvent({ name: 'AppA Started' });
+    }
+}
+
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;

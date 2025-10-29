@@ -1,6 +1,10 @@
 # Use the official Node.js runtime as the base image
 FROM node:18-alpine
 
+# Accept build argument for Application Insights instrumentation key
+ARG APPINSIGHTS_INSTRUMENTATION_KEY
+ENV APPINSIGHTS_INSTRUMENTATION_KEY=${APPINSIGHTS_INSTRUMENTATION_KEY}
+
 # Set the working directory in the container
 WORKDIR /app
 

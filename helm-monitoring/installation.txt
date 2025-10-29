@@ -1,0 +1,34 @@
+#Install Prometheus
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+helm install prometheus prometheus-community/prometheus \
+  --namespace monitor \
+  --set server.service.type=LoadBalancer \
+  --set alertmanager.service.type=LoadBalancer \
+  --set pushgateway.enabled=false \
+  --set nodeExporter.enabled=true \
+  --set kubeStateMetrics.enabled=true
+
+#Install Grafana
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+# Install Grafana with image rendering
+helm install grafana grafana/grafana \
+  --namespace monitor \
+  --set adminPassword=admin123 \
+  --set service.type=LoadBalancer \
+  --set imageRenderer.enabled=true \
+  --set imageRenderer.replicas=2 \
+  --set imageRenderer.image.repository=grafana/grafana-image-renderer \
+  --set imageRenderer.image.tag=3.6.0 \
+  --set imageRenderer.service.port=8081 \
+  --set imageRenderer.resources.requests.memory=100Mi \
+  --set imageRenderer.resources.requests.cpu=100m \
+  --set imageRenderer.resources.limits.memory=200Mi \
+  --set imageRenderer.resources.limits.cpu=200m \
+  --set imageRenderer.env.ENABLE_METRICS=true \
+  --set imageRenderer.env.IGNORE_HTTPS_ERRORS=true \
+  --set-string imageRenderer.env.RENDERING_ARGS="--no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-gpu --window-size=1280x720"
