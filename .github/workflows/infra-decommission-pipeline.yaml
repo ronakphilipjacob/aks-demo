@@ -32,7 +32,7 @@ jobs:
       working-directory: ./terraform/project
       run: cp ../tf_resources/* .
 
-    - name: Terraform Init and Validate
+    - name: Terraform Destroy
       working-directory: ./terraform/project
       run: |
         export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}

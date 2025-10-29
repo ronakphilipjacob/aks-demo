@@ -121,13 +121,6 @@ jobs:
           terraform_version: latest
 
       - name: Terraform Apply
-        run: |
-          cd tf
-          export ARM_SUBSCRIPTION_ID=${{ vars.ARM_SUBSCRIPTION_ID }}
-          terraform init
-          terraform apply -auto-approve tfplan
-
-      - name: Terraform Apply
         working-directory: ./tf
         run: |
           export ARM_SUBSCRIPTION_ID=${{ vars.AZURE_SUBSCRIPTION_ID }}
