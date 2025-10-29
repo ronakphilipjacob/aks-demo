@@ -15,10 +15,19 @@ spec:
         {{- include "prometheus.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "prometheus.serviceAccountName" . }}
+      securityContext:
+        fsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
       containers:
         - name: prometheus
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
           args:
             - '--config.file=/etc/prometheus/prometheus.yml'
             - '--storage.tsdb.path=/prometheus/'
