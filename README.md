@@ -59,7 +59,7 @@ Before provisioning infrastructure, add the following as GitHub Secrets and Vari
 - `AZURE_SUBSCRIPTION_ID` - Your Azure subscription ID
 - `AZURE_CLIENT_ID` - Service Principal client ID
 - `AZURE_TENANT_ID` - Azure tenant ID
-- Federated credentials have been used for the Service Pricipal
+- Federated credentials have been used for the Service Principal
 
 
 ### Step 2: Provision Infrastructure
