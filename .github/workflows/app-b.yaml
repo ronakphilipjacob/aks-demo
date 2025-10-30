@@ -1,14 +1,9 @@
 name: AppB-Service-CI
 
 on:
-  pull_request:
-    branches: [master]
   push:
-    paths:
-      - '.github/workflows/app-b.yaml'
-      - 'src/appB/**'
-  pull_request_target:
-    branches: [master]
+    branches:
+      - master
     paths:
       - '.github/workflows/app-b.yaml'
       - 'src/appB/**'

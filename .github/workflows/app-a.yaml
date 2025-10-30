@@ -1,14 +1,9 @@
 name: AppA-Service-CI
 
 on:
-  pull_request:
-    branches: [master]
   push:
-    paths:
-      - '.github/workflows/app-a.yaml'
-      - 'src/appA/**'
-  pull_request_target:
-    branches: [master]
+    branches:
+      - master
     paths:
       - '.github/workflows/app-a.yaml'
       - 'src/appA/**'
