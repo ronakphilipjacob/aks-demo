@@ -64,7 +64,6 @@ jobs:
           --output-file-path checkov-report \
           --quiet \
           --compact \
-          --skip-check CKV_AZURE_4,CKV_AZURE_35,CKV_AZURE_33 > /dev/null 2>&1 \
           --soft-fail
         
         if [ -f "checkov-report/results_sarif.sarif" ]; then
